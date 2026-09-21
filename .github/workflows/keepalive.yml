@@ -7,14 +7,18 @@ on:
 
 jobs:
   ping:
-    name: Ping Aiven PostgreSQL
+    name: Ping Aiven MySQL
     runs-on: ubuntu-latest
     steps:
-      - name: Install postgresql-client
-        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Install mysql-client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
 
       - name: Run SELECT 1 against Aiven
-        env:
-          PGPASSWORD: ${{ secrets.AIVEN_DB_PASSWORD }}
         run: |
-          psql "sslmode=require host=${{ secrets.AIVEN_DB_HOST }} port=${{ secrets.AIVEN_DB_PORT }} dbname=${{ secrets.AIVEN_DB_NAME }} user=${{ secrets.AIVEN_DB_USER }}" -c "SELECT 1;"
+          mysql --host="${{ secrets.AIVEN_DB_HOST }}" \
+                --port="${{ secrets.AIVEN_DB_PORT }}" \
+                --user="${{ secrets.AIVEN_DB_USER }}" \
+                --password="${{ secrets.AIVEN_DB_PASSWORD }}" \
+                --database="${{ secrets.AIVEN_DB_NAME }}" \
+                --ssl-mode=REQUIRED \
+                -e "SELECT 1;"
