@@ -1,0 +1,20 @@
+name: Aiven DB Keepalive
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Aiven PostgreSQL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install postgresql-client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Run SELECT 1 against Aiven
+        env:
+          PGPASSWORD: ${{ secrets.AIVEN_DB_PASSWORD }}
+        run: |
+          psql "sslmode=require host=${{ secrets.AIVEN_DB_HOST }} port=${{ secrets.AIVEN_DB_PORT }} dbname=${{ secrets.AIVEN_DB_NAME }} user=${{ secrets.AIVEN_DB_USER }}" -c "SELECT 1;"
