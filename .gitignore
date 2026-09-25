@@ -38,4 +38,5 @@ out/
 
 ### Local secrets ###
 application-private.yml
+application-local.yml
 .env
