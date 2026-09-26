@@ -18,6 +18,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 
+    @ExceptionHandler(RestaurantTableNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleTableNotFound(RestaurantTableNotFoundException e) {
+        Map<String, String> body = new LinkedHashMap<>();
+        body.put("message", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException e) {
         Map<String, String> errors = new LinkedHashMap<>();
